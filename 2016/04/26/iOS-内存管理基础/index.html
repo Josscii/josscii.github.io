@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>iOS 内存管理基础 | Hexo</title>
+  <title>iOS 内存管理基础 | Josscii&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在开始讲解之前，先科普几个后面可能提到的名词：
 
@@ -11,7 +11,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS 内存管理基础">
 <meta property="og:url" content="http://yoursite.com/2016/04/26/iOS-内存管理基础/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Josscii's Blog">
 <meta property="og:description" content="在开始讲解之前，先科普几个后面可能提到的名词：
 
 LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译器架构，它已经被成功应用到多个应用领域。Clang ( 发音为 /klæŋ/) 是 LLVM 的一个编译器前端，它目前支持 C, C++, Objective-C 以及 Objective-C++ 等编程语言。Clang 对源程序进行">
@@ -22,7 +22,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
 
 LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译器架构，它已经被成功应用到多个应用领域。Clang ( 发音为 /klæŋ/) 是 LLVM 的一个编译器前端，它目前支持 C, C++, Objective-C 以及 Objective-C++ 等编程语言。Clang 对源程序进行">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Josscii&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -43,7 +43,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Josscii&#39;s Blog</a>
       </h1>
       
     </div>
@@ -58,9 +58,9 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -148,7 +148,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/26/iOS-内存管理基础/" data-id="cinha786o0004t0zihvvwm05u" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/04/26/iOS-内存管理基础/" data-id="cinhaf0fj0001u6zi8j11g43u" class="article-share-link">Delen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -160,7 +160,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
 <nav id="article-nav">
   
     <a href="/2016/04/26/Block-内存管理总结/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Récent</strong>
+      <strong class="article-nav-caption">Nieuwer</strong>
       <div class="article-nav-title">
         
           Block 内存管理总结
@@ -183,7 +183,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Mot-clés</h3>
+    <h3 class="widget-title">Labels</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
@@ -193,7 +193,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/iOS/" style="font-size: 10px;">iOS</a>
     </div>
@@ -202,7 +202,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archieven</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li></ul>
     </div>
@@ -212,7 +212,7 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recente berichten</h3>
     <div class="widget">
       <ul>
         
@@ -240,8 +240,8 @@ LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 John Doe<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      &copy; 2016 josscii<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
