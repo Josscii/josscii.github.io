@@ -3,17 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>iOS 内存管理基础 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="在开始讲解之前，先科普几个后面可能提到的名词：
+
+LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译器架构，它已经被成功应用到多个应用领域。Clang ( 发音为 /klæŋ/) 是 LLVM 的一个编译器前端，它目前支持 C, C++, Objective-C 以及 Objective-C++ 等编程语言。Clang 对源程序进行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 内存管理基础">
+<meta property="og:url" content="http://yoursite.com/2016/04/26/iOS-内存管理基础/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description">
+<meta property="og:description" content="在开始讲解之前，先科普几个后面可能提到的名词：
+
+LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译器架构，它已经被成功应用到多个应用领域。Clang ( 发音为 /klæŋ/) 是 LLVM 的一个编译器前端，它目前支持 C, C++, Objective-C 以及 Objective-C++ 等编程语言。Clang 对源程序进行">
+<meta property="og:updated_time" content="2016-04-26T10:01:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description">
+<meta name="twitter:title" content="iOS 内存管理基础">
+<meta name="twitter:description" content="在开始讲解之前，先科普几个后面可能提到的名词：
+
+LLVM &amp;amp; clang：Low Level Virtual Machine (LLVM) 是一个开源的编译器架构，它已经被成功应用到多个应用领域。Clang ( 发音为 /klæŋ/) 是 LLVM 的一个编译器前端，它目前支持 C, C++, Objective-C 以及 Objective-C++ 等编程语言。Clang 对源程序进行">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -62,133 +69,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-理解-ScrollView" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/26/理解-ScrollView/" class="article-date">
-  <time datetime="2016-04-26T10:05:55.000Z" itemprop="datePublished">2016-04-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/26/理解-ScrollView/">理解 ScrollView</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>首先要明确的是，scrollview 其实和普通的 view 并没有多大的差别，只不过给它加上了一些手势和约定。</p>
-<p>我们知道，要让一个 scrollview 能够滚动的方法是设置它的 contentSize 的宽或者高或者同时比自己的大。</p>
-<p>想一想为什么要这样做？</p>
-<p>首先，scrollview 被苹果开发出来是为了通过滚动来显示比自己的 size 更多的内容，如果它的 contentSize 比自己都小，就没有滚动的必要了。</p>
-<p>但实际上，scrollview 并没有滚动，当你在“拖动” scrollview 时，你其实是在改变 scrollview 的 bounds.origin。 </p>
-<p>那么什么是 bounds 呢？ bounds 和 frame 又有什么关系呢？</p>
-<p>bounds 是一个 view 自身的坐标系，它的作用是规定它自身的内容从什么位置开始绘制。 frame 是一个 view 相对于自己父视图的位置。它们是完全不相关联的。</p>
-<p>你已经知道的是，当你“拖动” scrollview 时， scrollview 的代理会收到scrollViewDidScroll: 的消息，在里面打印 scrollview 的 contentOffset 的值，这个值会随着你的“拖动”不停的变化。这时候，尝试打印一下 scrollview 的 bounds.origin 的值，你会发现，这个值竟然和前面的值一样。contentOffset 只是为了更好的说明情况给 bounds.origin 换了个名字而已。</p>
-<p>contentSize 只是抽象的概念，它规定的其实是 scrollview 的 bounds.origin 能够变化的范围。</p>
-<p>理解到这里，像其他的 scrollview 的特性，例如 bounces 等，都可以得到解释。</p>
-<p>scrollview 还增加了一个特性，contentInset，它用来 scrollview 增加额外的滚动范围，其实就是把 bounds.origin 的变化范围扩大了。当你给 scrollview 设置 contentInset 的时候，你会发现，它的 contentSize 并没有改变。</p>
-<p>一般情况下，你并不会通过直接设置 contentSize 来达到你“滚动”的目的，因为当你想让 scrollview 的所有内容都能够通过“滚动”的方式显示时，你很难计算子视图整体的大小， 因为子视图在当时有可能还没决定自己的大小。所以通常来说，你会用 scrollview 的子类，例如 tableview 和 textview。他们会根据自己内容的大小自动的设置 scrollview 的 contentSize，以便包裹所有内容。当然他们有自己不同的使用场景。</p>
-<p>同样，当我们试图实现类似的功能时，我们该怎么做呢？</p>
-<p>这里我们会用到 Auto layout。最佳实践是首先在 scrollview 上添加一个四周的 edge constraints 与 scrollview 间距为0的 content view，接下来，把你想要的子视图添加上去并且设置好相应的约束就可以了。</p>
-<p>当我们实现上面的功能后，如果我们还想通过增加一些额外的滚动空间来实现例如防止键盘遮挡视图、下拉刷新或者上拉加载的功能时，我们就可以通过简单的设置 scroll view 的 contentInset 来实现，而不必从一开始就去关心 contentSize 的大小。</p>
-<p>问题思考：scrollView 的代理有 scrollViewDidScrollToTop: 的方法来通知 scrollView 滑动到了顶部，想一想它的原理是什么？如何知道 scrollView 滑动到底部了呢？如果还要加上考虑 contentOffset 和 contentInset 呢？</p>
-<p>参考资料：<br><a href="https://www.objc.io/issues/3-views/scroll-view/" target="_blank" rel="external">https://www.objc.io/issues/3-views/scroll-view/</a></p>
-<p><a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithScrollViews.html#//apple_ref/doc/uid/TP40010853-CH24-SW1" target="_blank" rel="external">https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithScrollViews.html#//apple_ref/doc/uid/TP40010853-CH24-SW1</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/26/理解-ScrollView/" data-id="cinha786l0003t0zizbi4egfq" class="article-share-link">Partager</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Block-内存管理总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/26/Block-内存管理总结/" class="article-date">
-  <time datetime="2016-04-26T10:02:41.000Z" itemprop="datePublished">2016-04-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/26/Block-内存管理总结/">Block 内存管理总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前面只是大概的提了一下 block 还不够深入，这里通过回答几个经常碰到的问题来对 block 有个更深入的理解。</p>
-<p><strong>名词解释</strong>：</p>
-<ul>
-<li><p>automatic variable、local variable、局部变量都代表一个东西，存活在栈上。</p>
-</li>
-<li><p>block literal (字面量)，例：^ { printf(“hello world\n”); }</p>
-</li>
-</ul>
-<p><strong>问题1</strong></p>
-<p>通常来说，我们会把 block literal 赋值给声明的 block 变量，那么这些 block 都是什么类型呢？</p>
-<p>以下规则适用于 MRC &amp; ARC：</p>
-<p>当block literal 被赋值给函数内部的局部变量时，一开始会被创建在栈上， isa 指针指向 _NSConcreteStackBlock,<br>当block literal 被赋值给 static 的变量或者全局变量时，会被创建在 text 区，isa 指针指向 _NSConcreteGlobalBlock，<br>特别的，当block 没有引用外部变量时，clang 会做一个优化，这时的 block 为 _NSConcreteGlobalBlock。</p>
-<p>如果把 block 进行 copy （block_copy）操作后，该 block 会被 copy 到堆上，变成 _NSConcreteMallocBlock。</p>
-<p>特别的，由于在 ARC 中对象声明都默认有 __strong 修饰，所以此时的 block 会被 copy 到堆上，这点需要注意。</p>
-<p><strong>问题2</strong></p>
-<p>我们都知道 block 会捕获外部的变量，那么捕获变量又有哪些规则呢？</p>
-<p>以下规则适用于 MRC &amp; ARC：<br>对于局部的基本数据类型的变量，block 会 copy 一份值，并且不可修改。<br>对于全局、静态、属性基本类型变量，blcok 和外部共享一份，可以修改。</p>
-<p>有区别的地方：</p>
-<p>对于局部的对象，non-arc 会copy一份指针，并且不会 retain；arc 会强引用（retain，引用计数加一），均不可修改。</p>
-<p>对于属性对象 &amp; self，arc下会被 retain，<br>而 non-arc 需要分情况：<br>     如果为 stack block，那么就不会被 retain；<br>     如果为 malloc block，就会被 retain。</p>
-<p>(注：除了 NSString *可以声明为静态、全局的对象外，其他的对象都不行，字符串比较特殊，可以作为编译时常量)</p>
-<p><strong>问题3</strong></p>
-<p>如果我们修改捕获的变量，又该怎么办呢？</p>
-<p>我们可以在 block 声明的前面加上 __block 修饰，此时，就可以修改被捕获的变量了，并且会影响外部的值。</p>
-<p>只是要注意的是，只要 block 被 copy 后（无论是被强引用还是手动 copy），捕获的变量都会被 copy 到堆上，此时原来栈上的 __block 变量会被销毁。</p>
-<p><strong>问题4</strong></p>
-<p>什么时候会产生循环引用？如何解决呢？</p>
-<p>简单来说，只要 self 持有了 block，而在 block 里又对 self 进行了捕获，那么就会导致循环引用，所以一般的栈上的 block 就不会引起循环引用。</p>
-<p>解决方案就是打破循环引用，一般来说：<br>在 MRC 下，创建一个用 <strong>block 修饰的指向 self 的指针，在 block 里使用它。<br>在 ARC 下，创建一个用 </strong>weak 修饰的指向 self 的指针，在 block 里使用它。</p>
-<p><strong>参考链接</strong><br><a href="http://clang.llvm.org/docs/Block-ABI-Apple.html" target="_blank" rel="external">http://clang.llvm.org/docs/Block-ABI-Apple.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/26/Block-内存管理总结/" data-id="cinha785z0000t0zi8rz6vp7i" class="article-share-link">Partager</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-iOS-内存管理基础" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-iOS-内存管理基础" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/04/26/iOS-内存管理基础/" class="article-date">
   <time datetime="2016-04-26T09:57:51.000Z" itemprop="datePublished">2016-04-26</time>
@@ -201,8 +82,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/26/iOS-内存管理基础/">iOS 内存管理基础</a>
+    <h1 class="article-title" itemprop="name">
+      iOS 内存管理基础
     </h1>
   
 
@@ -275,10 +156,23 @@
     </footer>
   </div>
   
-</article>
-
+    
+<nav id="article-nav">
+  
+    <a href="/2016/04/26/Block-内存管理总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Block 内存管理总结
+        
+      </div>
+    </a>
+  
+  
+</nav>
 
   
+</article>
 
 </section>
         
