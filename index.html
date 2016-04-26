@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Josscii&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Josscii's Blog">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Josscii's Blog">
+<meta property="og:description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Josscii's Blog">
+<meta name="twitter:description">
+  
+    <link rel="alternative" href="/atom.xml" title="Josscii&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Josscii&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="yoursite.com">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main">
+  
+    <article id="post-Swift-Function-详解" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/26/Swift-Function-详解/" class="article-date">
+  <time datetime="2016-04-26T12:51:12.000Z" itemprop="datePublished">2016-04-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/26/Swift-Function-详解/">Swift Function 详解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Swift 中的方法声明随着 Swift 的版本一直在改进，下面我们就来看看 Swift 中方法的演进史吧！</p>
+<p>在开始讲解之前，我们先熟悉几个名词：</p>
+<ul>
+<li><strong>函数名</strong>（function-name），就是函数的名字，上面的 myFunction 就是函数名</li>
+<li><strong>函数签名</strong>（function-signature），函数签名和函数名不同，函数签名由参数列表和返回值组成</li>
+<li><strong>函数类型</strong>（function-type），比如上面的 myFunction 的函数类型就是 (parameterType) -&gt; returnType</li>
+<li><strong>外部参数名</strong>（external-parameter-name­），外部参数名是为了达到和 OC 的函数兼容的目的，作用仅仅是为了让使用这个方法的人更清晰的了解传入的这个参数是什么意思。</li>
+<li><strong>内部参数名</strong>（local-parameter-name­)，这和其他语言一样用来代替传入参数，使我们能够在内部拿到传入的参数。</li>
+<li>因为内外部参数名被放在参数的前面，所以还有 parameter-label 一说，为了说清楚某些情况，我们下面也会使用到它。</li>
+</ul>
+<h2 id="基本函数知识"><a href="#基本函数知识" class="headerlink" title="基本函数知识"></a>基本函数知识</h2><p>Swift 方法既可以写成简单的没有参数外部名的 c 函数，又可以写成 OC 那种复杂的内外部参数名都有的函数。我们先来看一个例子：</p>
+<pre><code>func myFunction(param1: parameterType, param2: parameterType) throw -&gt; returnType {
+    // function body
+}
+</code></pre><p>首先我们要知道的是，在 Swift 中，在每个参数前只有一个 parameter-label 修饰时，第一个参数的外部参数名默认是被忽略的，而其他的参数的外部参数名和内部参数名相同，举个例子：</p>
+<pre><code>enum SongType: String {
+    case Happy
+    case Sad
+}
+
+// 1
+func singASong(songName: String, songType: SongType) {
+    print(&quot;Singing a \(songType) song named \(songName)&quot;)
+}
+</code></pre><p>我们会这样调用这个函数:</p>
+<pre><code>singASong(&quot;Happy Birthday&quot;, songType: .Happy)
+</code></pre><p>我们看到调用这个函数时，第一个参数并没有外部参数名，而第二个参数有外部参数名，并且之前我们也把它作为内部参数名使用了。</p>
+<p><strong>注意</strong>：是上面那条规则只适用于普通函数，构造函数不适用。</p>
+<p>为什么 Swift 函数会默认有这样的特性呢？你应该也发现了，这其实就是为了和 OC 的行为表现得一样。</p>
+<p>因为我们在用 OC 写这样一个函数时通常像这样写：</p>
+<pre><code>- (void)singASong:(NSString *) songtype:(SongType)songtype;
+</code></pre><p>如果我们想要给第一个参数加上外部参数，或者给其他参数去掉外部参数，你可以像下面这样做：</p>
+<pre><code>// 2
+func singASong(songName name: String, _ songType: SongType) {
+    print(&quot;Singing a \(songType) song named \(name)&quot;)
+}
+</code></pre><p>我们会这样调用这个函数:</p>
+<pre><code>singASong(songName: &quot;Writting Code&quot;, .Sad)
+</code></pre><p>哦？这两个函数竟然可以同时存在? 怎么回事？先不要着急，我们试试给第一个函数换一个返回值试试：（如果一个函数没有指明函数返回值类型，那么默认返回 void ）</p>
+<pre><code>// 3
+func singASong(songName: String, songType: SongType) -&gt; String {
+   print(&quot;Singing a \(songType) song named \(songName)&quot;)
+    return &quot;no error&quot;
+}
+</code></pre><p>接下来我们给第一个函数换一个函数名字：</p>
+<pre><code>// 4
+func singASon(songName: String, songType: SongType) {
+    print(&quot;Singing a \(songType) song named \(songName)&quot;)
+}
+</code></pre><p>此时并没有报错，我们来想想 Swift 是怎么区分函数的呢？</p>
+<p>第一个函数的签名是， (<em>:songType:) -&gt; void<br>第二个函数的签名是， (songName:</em>:) -&gt; void<br>第三个函数的签名是， (<em>:songType:) -&gt; String<br>第四个函数的签名是， (</em>:songType:) -&gt; void</p>
+<p>第一个函数和第二个函数可以并存是因为，两个函数的参数列表的外部参数名不同，</p>
+<p>第一个函数和第三个函数可以并存是因为，两个函数的返回值不同，</p>
+<p>当然函数名不同的函数肯定可以并存，就像函数一和四。</p>
+<p>所以总结下来，函数是根据函数名和函数签名来区分函数的。</p>
+<p>另外，OC 里面能够通过字符串生成一个 SEL 类型，这个字符串通常用来代表某个函数。为了兼容 OC，Swift 也支持这样的方式。</p>
+<pre><code>class Demo: NSObject {
+    let button = UIButton()
+
+    override init() {
+        super.init()
+        // 在 swift 2.0 之前，你可以像下面这样做：
+        // button.addTarget(self, action: &quot;buttonTapped:&quot;, forControlEvents: .TouchUpInside)
+        // 从 swift 2.2 开始，直接通过字符串生成 Seletor 的方式已经被抛弃了，取而代之的是下面这种方式
+       button.addTarget(self, action: #selector(Demo.buttonTapped(_:)), forControlEvents: .TouchUpInside)
+}
+
+    func buttonTapped(sender: UIButton) {
+        print(&quot;button tapped&quot;)
+    }
+}
+</code></pre><p>但是要注意的是，如果函数参数存在 OC 和 Swift 不兼容的部分，比如元组、枚举等，那么这个函数就无法转化成 Selector。</p>
+<h2 id="关于参数的可变性"><a href="#关于参数的可变性" class="headerlink" title="关于参数的可变性"></a>关于参数的可变性</h2><p>在 Swift 2.2 及其之前，函数的参数默认是被 let 修饰的，并且传入的参数只是原变量的一个 copy。</p>
+<p>所以这个参数没办法修改，像下面这样是不行的：</p>
+<pre><code>func add(a: Int) {
+    a += 1
+}
+</code></pre><p>要想这个参数可变，你可以在参数前用 var 修饰，这样就可以愉快的修改参数的值啦：</p>
+<pre><code>func add1(var a: Int) {
+    a += 1
+}
+
+var a = 0
+
+add1(a)
+
+a = 0
+</code></pre><p>要想影响原变量的值，你需要在参数前用 inout 修饰：</p>
+<pre><code>func add2(inout a: Int) {
+    a += 1
+}
+
+var b = 0
+
+add1(b)
+
+// b = 1
+</code></pre><p>规则看起来还是蛮简单的，可是在 Swift 开源过后，这个设定被大量的开发者诟病，所以就有了下列提议：</p>
+<ul>
+<li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0003-remove-var-parameters.md" target="_blank" rel="external">0003-remove-var-parameters</a></li>
+<li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0053-remove-let-from-function-parameters.md" target="_blank" rel="external">0053-remove-let-from-function-parameters</a></li>
+<li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0031-adjusting-inout-declarations.md" target="_blank" rel="external">0031-adjusting-inout-declarations</a></li>
+</ul>
+<p>他们认为 var 和 inout 容易引起歧义，这些提议也被接收了，将在 Swift 3.0 中正式使用，所以 Swift 3.0 后规则将变成这样：</p>
+<ul>
+<li><strong>let</strong> 作为不能被显示的用作参数修饰符，传入的参数默认就是不可在内部被修改的。</li>
+<li><strong>var</strong> 作为参数修饰符被去掉，目前的设计是在参数被传入后立即用一个相同名字的变量把不可变的传入参数给 shadow 掉，所以看起来在里面可以改变参数的值，但是不影响外部。</li>
+<li><strong>inout</strong> 被改变位置，就像这样 func foo(x: inout T) -&gt; U。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/04/26/Swift-Function-详解/" data-id="cinhgk41q00010ozi4lapk4qc" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://yoursite.com/2016/04/26/Swift-Function-详解/#ds-thread" class="article-comment-link">评论</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-理解-ScrollView" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/26/理解-ScrollView/" class="article-date">
+  <time datetime="2016-04-26T10:05:55.000Z" itemprop="datePublished">2016-04-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/26/理解-ScrollView/">理解 ScrollView</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>首先要明确的是，scrollview 其实和普通的 view 并没有多大的差别，只不过给它加上了一些手势和约定。</p>
+<p>我们知道，要让一个 scrollview 能够滚动的方法是设置它的 contentSize 的宽或者高或者同时比自己的大。</p>
+<p>想一想为什么要这样做？</p>
+<p>首先，scrollview 被苹果开发出来是为了通过滚动来显示比自己的 size 更多的内容，如果它的 contentSize 比自己都小，就没有滚动的必要了。</p>
+<p>但实际上，scrollview 并没有滚动，当你在“拖动” scrollview 时，你其实是在改变 scrollview 的 bounds.origin。 </p>
+<p>那么什么是 bounds 呢？ bounds 和 frame 又有什么关系呢？</p>
+<p>bounds 是一个 view 自身的坐标系，它的作用是规定它自身的内容从什么位置开始绘制。 frame 是一个 view 相对于自己父视图的位置。它们是完全不相关联的。</p>
+<p>你已经知道的是，当你“拖动” scrollview 时， scrollview 的代理会收到scrollViewDidScroll: 的消息，在里面打印 scrollview 的 contentOffset 的值，这个值会随着你的“拖动”不停的变化。这时候，尝试打印一下 scrollview 的 bounds.origin 的值，你会发现，这个值竟然和前面的值一样。contentOffset 只是为了更好的说明情况给 bounds.origin 换了个名字而已。</p>
+<p>contentSize 只是抽象的概念，它规定的其实是 scrollview 的 bounds.origin 能够变化的范围。</p>
+<p>理解到这里，像其他的 scrollview 的特性，例如 bounces 等，都可以得到解释。</p>
+<p>scrollview 还增加了一个特性，contentInset，它用来 scrollview 增加额外的滚动范围，其实就是把 bounds.origin 的变化范围扩大了。当你给 scrollview 设置 contentInset 的时候，你会发现，它的 contentSize 并没有改变。</p>
+<p>一般情况下，你并不会通过直接设置 contentSize 来达到你“滚动”的目的，因为当你想让 scrollview 的所有内容都能够通过“滚动”的方式显示时，你很难计算子视图整体的大小， 因为子视图在当时有可能还没决定自己的大小。所以通常来说，你会用 scrollview 的子类，例如 tableview 和 textview。他们会根据自己内容的大小自动的设置 scrollview 的 contentSize，以便包裹所有内容。当然他们有自己不同的使用场景。</p>
+<p>同样，当我们试图实现类似的功能时，我们该怎么做呢？</p>
+<p>这里我们会用到 Auto layout。最佳实践是首先在 scrollview 上添加一个四周的 edge constraints 与 scrollview 间距为0的 content view，接下来，把你想要的子视图添加上去并且设置好相应的约束就可以了。</p>
+<p>当我们实现上面的功能后，如果我们还想通过增加一些额外的滚动空间来实现例如防止键盘遮挡视图、下拉刷新或者上拉加载的功能时，我们就可以通过简单的设置 scroll view 的 contentInset 来实现，而不必从一开始就去关心 contentSize 的大小。</p>
+<p>问题思考：scrollView 的代理有 scrollViewDidScrollToTop: 的方法来通知 scrollView 滑动到了顶部，想一想它的原理是什么？如何知道 scrollView 滑动到底部了呢？如果还要加上考虑 contentOffset 和 contentInset 呢？</p>
+<p>参考资料：<br><a href="https://www.objc.io/issues/3-views/scroll-view/" target="_blank" rel="external">https://www.objc.io/issues/3-views/scroll-view/</a></p>
+<p><a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithScrollViews.html#//apple_ref/doc/uid/TP40010853-CH24-SW1" target="_blank" rel="external">https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithScrollViews.html#//apple_ref/doc/uid/TP40010853-CH24-SW1</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/04/26/理解-ScrollView/" data-id="cinhgk42700070oziejehjwb5" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://yoursite.com/2016/04/26/理解-ScrollView/#ds-thread" class="article-comment-link">评论</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Block-内存管理总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/26/Block-内存管理总结/" class="article-date">
+  <time datetime="2016-04-26T10:02:41.000Z" itemprop="datePublished">2016-04-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/26/Block-内存管理总结/">Block 内存管理总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前面只是大概的提了一下 block 还不够深入，这里通过回答几个经常碰到的问题来对 block 有个更深入的理解。</p>
+<p><strong>名词解释</strong>：</p>
+<ul>
+<li><p>automatic variable、local variable、局部变量都代表一个东西，存活在栈上。</p>
+</li>
+<li><p>block literal (字面量)，例：^ { printf(“hello world\n”); }</p>
+</li>
+</ul>
+<p><strong>问题1</strong></p>
+<p>通常来说，我们会把 block literal 赋值给声明的 block 变量，那么这些 block 都是什么类型呢？</p>
+<p>以下规则适用于 MRC &amp; ARC：</p>
+<p>当block literal 被赋值给函数内部的局部变量时，一开始会被创建在栈上， isa 指针指向 _NSConcreteStackBlock,<br>当block literal 被赋值给 static 的变量或者全局变量时，会被创建在 text 区，isa 指针指向 _NSConcreteGlobalBlock，<br>特别的，当block 没有引用外部变量时，clang 会做一个优化，这时的 block 为 _NSConcreteGlobalBlock。</p>
+<p>如果把 block 进行 copy （block_copy）操作后，该 block 会被 copy 到堆上，变成 _NSConcreteMallocBlock。</p>
+<p>特别的，由于在 ARC 中对象声明都默认有 __strong 修饰，所以此时的 block 会被 copy 到堆上，这点需要注意。</p>
+<p><strong>问题2</strong></p>
+<p>我们都知道 block 会捕获外部的变量，那么捕获变量又有哪些规则呢？</p>
+<p>以下规则适用于 MRC &amp; ARC：<br>对于局部的基本数据类型的变量，block 会 copy 一份值，并且不可修改。<br>对于全局、静态、属性基本类型变量，blcok 和外部共享一份，可以修改。</p>
+<p>有区别的地方：</p>
+<p>对于局部的对象，non-arc 会copy一份指针，并且不会 retain；arc 会强引用（retain，引用计数加一），均不可修改。</p>
+<p>对于属性对象 &amp; self，arc下会被 retain，<br>而 non-arc 需要分情况：<br>     如果为 stack block，那么就不会被 retain；<br>     如果为 malloc block，就会被 retain。</p>
+<p>(注：除了 NSString *可以声明为静态、全局的对象外，其他的对象都不行，字符串比较特殊，可以作为编译时常量)</p>
+<p><strong>问题3</strong></p>
+<p>如果我们修改捕获的变量，又该怎么办呢？</p>
+<p>我们可以在 block 声明的前面加上 __block 修饰，此时，就可以修改被捕获的变量了，并且会影响外部的值。</p>
+<p>只是要注意的是，只要 block 被 copy 后（无论是被强引用还是手动 copy），捕获的变量都会被 copy 到堆上，此时原来栈上的 __block 变量会被销毁。</p>
+<p><strong>问题4</strong></p>
+<p>什么时候会产生循环引用？如何解决呢？</p>
+<p>简单来说，只要 self 持有了 block，而在 block 里又对 self 进行了捕获，那么就会导致循环引用，所以一般的栈上的 block 就不会引起循环引用。</p>
+<p>解决方案就是打破循环引用，一般来说：<br>在 MRC 下，创建一个用 <strong>block 修饰的指向 self 的指针，在 block 里使用它。<br>在 ARC 下，创建一个用 </strong>weak 修饰的指向 self 的指针，在 block 里使用它。</p>
+<p><strong>参考链接</strong><br><a href="http://clang.llvm.org/docs/Block-ABI-Apple.html" target="_blank" rel="external">http://clang.llvm.org/docs/Block-ABI-Apple.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/04/26/Block-内存管理总结/" data-id="cinhgk41m00000ozi4r40ibay" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://yoursite.com/2016/04/26/Block-内存管理总结/#ds-thread" class="article-comment-link">评论</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-iOS-内存管理基础" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/26/iOS-内存管理基础/" class="article-date">
+  <time datetime="2016-04-26T09:57:51.000Z" itemprop="datePublished">2016-04-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/26/iOS-内存管理基础/">iOS 内存管理基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在开始讲解之前，先科普几个后面可能提到的名词：</p>
+<ul>
+<li><strong>LLVM &amp; clang</strong>：Low Level Virtual Machine (LLVM) 是一个开源的编译器架构，它已经被成功应用到多个应用领域。Clang ( 发音为 /klæŋ/) 是 LLVM 的一个编译器前端，它目前支持 C, C++, Objective-C 以及 Objective-C++ 等编程语言。Clang 对源程序进行词法分析和语义分析，并将分析结果转换为 Abstract Syntax Tree ( 抽象语法树 ) ，最后使用 LLVM 作为后端代码的生成器。</li>
+<li><strong>MRC &amp; MRR</strong>：Manual Reference counting，手动引用计数，因为需要在代码里面手动调用 retain、release 来管理内容，所以也被称为 Manual retain release。</li>
+<li><strong>ARC</strong>：自动引用计数，是一个编译器特性，遵循手动引用计数的规则，替开发者在编译时期添加合适的代码。</li>
+<li><strong>持有对象</strong>：持有某个对象会让这个对象的引用计数加一。</li>
+<li><strong>内存泄漏</strong>：对象使用完毕后未释放，结果导致一直占据该内存单元，直到程序结束。一般来说就是指向该对象的指针释放了，但是对象未释放。</li>
+<li><strong>作用域</strong>：一段代码能够起作用的区域，一般来说，两个大括号内代表一个作用域。</li>
+</ul>
+<h2 id="MRC"><a href="#MRC" class="headerlink" title="MRC"></a>MRC</h2><p>对于一个 2015 年才开始接触 iOS 开发的新手来说，不知道 MRC 算是很正常的，因为从 Xcode 4.2 开始就默认开启 ARC 了。那么是不是说学习 MRC 对我们来说就没用了呢，当然不是，学习 MRC 能帮助我们更好的了解 Objective-C 的内存管理机制，写出 bug-free 的代码。</p>
+<p>我们首先要知道引用计数的规则：</p>
+<ul>
+<li>你持有你创建的对象。</li>
+<li>你可以通过 retain 来持有某个对象。</li>
+<li>在你不需要某个对象时，你必须通过 release 释放它。</li>
+<li>你不能释放你并不持有的对象。</li>
+</ul>
+<p>下面我来逐一解释一下，在 MRC 环境中：</p>
+<p>当你用以 alloc/new/copy/mutableCopy 开头的方法创建对象时，首先会为该对象分配内存，然后把该对象的引用计数会加一，通常来说，你还会声明一个指向该对象的指针，此时你就持有该对象。</p>
+<p>在 Apple 的引用计数的底层实现中，用一张哈希表来管理对象的引用计数，当你调用对象的 retain 方法时，首先找到哈希表对应的位置，对象的引用计数会加一，此时你就持有该对象。</p>
+<p>对象在离开声明它的那个 Scope 后，或者说你不再需要某个对象时，必须将它销毁，你不能手动调用 dealloc 方法，而是调用 release 方法减少引用计数，当引用计数为 0 时，对象会自动调用 dealloc 方法销毁对象，释放内存。</p>
+<p>你不能对你并不持有的对象调用 release，否则程序可能会崩溃。</p>
+<p>最后说一下 autorelease，对象通过调用 autorelease 方法注册到上下文中的 NSAutoreleasePool 时，当自动销毁池被销毁后，对象也会被自动的销毁，在 iOS 程序中，由 runloop 维护了一个自动销毁池，所以我们不用创建。在其他地方，我们可以通过 NSAutoreleasePool 类，或者 @autorelease { // code insert here  } 创建自动销毁池。</p>
+<h2 id="ARC"><a href="#ARC" class="headerlink" title="ARC"></a>ARC</h2><p>为了让 iOS 程序员更多的关注应用的实现，而不是在内存管理上纠结，Apple 就推出了 ARC，<a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226" target="_blank" rel="external">这里</a>还有专门的文档帮助你从 MRC 迁移到 ARC。</p>
+<p>在 ARC 环境中，引用计数的规则没有发生改变，但是对象在声明时，必须用下列标识符之一标识：</p>
+<ul>
+<li>__strong</li>
+<li>__weak</li>
+<li>__unsafe_unretained</li>
+<li>__autoreleasing</li>
+</ul>
+<p>默认情况下，所有对象的标识符为 <strong>strong</strong>。</p>
+<p>当你声明一个被 strong 标识的指向一个对象的指针时，无论该对象以什么形式创建，该对象的引用计数都会增加一，你持有该对象。并且，当该对象离开作用域时，会自动插入调用对象的 release 方法的代码。</p>
+<p>当你声明一个被 weak 标识的指向一个对象的指针时，对象的引用计数并不会增加，你就没有持有该对象，此时对象的引用计数为 0，对象会被自动释放，此时指向该对象的 weak 指针的值会被置为 nil。</p>
+<p>unsafe_unretained 和 weak 有一点不同的是，当对象被释放后，指针不会被置空，而是继续指向已经被释放的内存空间，形成悬垂指针，所以是不安全的。</p>
+<p>通常来说你不用手动标识 __autoreleasing，编译器会自动帮你处理。</p>
+<h2 id="Block"><a href="#Block" class="headerlink" title="Block"></a>Block</h2><p>在平常的 iOS 开发的内存管理中，可能最难的就是 block。</p>
+<p>首先 block 是一种对象，但它比较特殊的是，它一开始的时候是被创建在<strong>栈</strong>上的。</p>
+<p>在 MRC 环境中，我们声明一个 block，如果该 block 没有引用外部的对象，那么这个 block 的类型为 NSConcreteGlobalBlock，如果该 block 引用了外部对象，那么该 block 的类型为 NSConcreteStackBlock，因为它本身在栈中，所以不会持有外部的对象。</p>
+<p>你可以通过 copy 操作来将 block 复制到堆中，此时 block 的类型为NSConcreteMallocBlock，此时 block 会持有外部对象。</p>
+<p>在 ARC 环境中，因为默认情况下对象指针被 __strong 标示，所以大多数时候创建的 block 都会被 copy 到堆中。</p>
+<h2 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h2><p>如果两个对象互相持有，那么就会发生循环引用的悲剧，这时，我们只需要将不太重要的那个设置为标识为 __weak，循环引用就会被解开，内存就可以正常释放了。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>为什么在 ARC 环境下我们还需要 autoreleasepool ?</li>
+</ul>
+<p>在 cocoa 中，每个线程都会有一个 runloop，每个 runloop 有一个 autoreleasepool 栈，每次 runloop 结束后，这个栈会被销毁。</p>
+<p>类方法返回的实例都会被标记为 autorelease，它会被自动添加到 pool 中，直到 pool 被销毁。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>《Pro Multithreading and Memory Management for iOS and OS X》</li>
+<li><a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-clang/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-cn-clang/</a></li>
+<li><a href="http://www.friday.com/bbum/2009/08/29/blocks-tips-tricks/" target="_blank" rel="external">http://www.friday.com/bbum/2009/08/29/blocks-tips-tricks/</a></li>
+<li><a href="http://www.jianshu.com/p/e03292674e60" target="_blank" rel="external">http://www.jianshu.com/p/e03292674e60</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/04/26/iOS-内存管理基础/" data-id="cinhgk42500060ozilm3q7n6g" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://yoursite.com/2016/04/26/iOS-内存管理基础/#ds-thread" class="article-comment-link">评论</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/04/26/Swift-Function-详解/">Swift Function 详解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/26/理解-ScrollView/">理解 ScrollView</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/26/Block-内存管理总结/">Block 内存管理总结</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/26/iOS-内存管理基础/">iOS 内存管理基础</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://xiguabaobao.com" target="_blank">主题作者</a>
+          </li>
+        
+          <li>
+            <a href="http://reqianduan.com" target="_blank">热前端</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 josscii<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"josscii"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"/css/bdshare.css"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+</div>
+</body>
+</html>
