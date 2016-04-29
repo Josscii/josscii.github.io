@@ -204,11 +204,11 @@ add1(b)
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/26/Swift-Function-详解/" data-id="cinkjobd80001rzzil3awf4bi" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/26/Swift-Function-详解/" data-id="cinl5h4s70000sqzi9xb5yu03" class="article-share-link" data-share="baidu">Share</a>
       
 
       
-        <a href="http://yoursite.com/2016/04/26/Swift-Function-详解/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://yoursite.com/2016/04/26/Swift-Function-详解/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -266,11 +266,11 @@ add1(b)
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/26/理解-ScrollView/" data-id="cinkjobdd0004rzzi799cnfkn" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/26/理解-ScrollView/" data-id="cinl5h4sh0004sqziy95zokzj" class="article-share-link" data-share="baidu">Share</a>
       
 
       
-        <a href="http://yoursite.com/2016/04/26/理解-ScrollView/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://yoursite.com/2016/04/26/理解-ScrollView/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -340,11 +340,11 @@ add1(b)
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/26/Block-内存管理总结/" data-id="cinkjobd30000rzzimywx8t97" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/26/Block-内存管理总结/" data-id="cinl5h4sb0001sqziq9gnk6hw" class="article-share-link" data-share="baidu">Share</a>
       
 
       
-        <a href="http://yoursite.com/2016/04/26/Block-内存管理总结/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://yoursite.com/2016/04/26/Block-内存管理总结/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -410,11 +410,11 @@ add1(b)
 <li>__unsafe_unretained</li>
 <li>__autoreleasing</li>
 </ul>
-<p>默认情况下，所有对象的标识符为 <strong>strong</strong>。</p>
+<p>默认情况下，所有对象的标识符为 <strong>__strong</strong>。</p>
 <p>当你声明一个被 strong 标识的指向一个对象的指针时，无论该对象以什么形式创建，该对象的引用计数都会增加一，你持有该对象。并且，当该对象离开作用域时，会自动插入调用对象的 release 方法的代码。</p>
 <p>当你声明一个被 weak 标识的指向一个对象的指针时，对象的引用计数并不会增加，你就没有持有该对象，此时对象的引用计数为 0，对象会被自动释放，此时指向该对象的 weak 指针的值会被置为 nil。</p>
 <p>unsafe_unretained 和 weak 有一点不同的是，当对象被释放后，指针不会被置空，而是继续指向已经被释放的内存空间，形成悬垂指针，所以是不安全的。</p>
-<p>通常来说你不用手动标识 __autoreleasing，编译器会自动帮你处理。</p>
+<p>注意，在 ARC 下，用非 init/new/copy/mutableCopy 方法创建的对象默认都是 autorelease 的对象，这些对象会被注册到上下文中 autoreleasepool 中，等到 pool 被销毁时才被销毁。</p>
 <h2 id="Block"><a href="#Block" class="headerlink" title="Block"></a>Block</h2><p>在平常的 iOS 开发的内存管理中，可能最难的就是 block。</p>
 <p>首先 block 是一种对象，但它比较特殊的是，它一开始的时候是被创建在<strong>栈</strong>上的。</p>
 <p>在 MRC 环境中，我们声明一个 block，如果该 block 没有引用外部的对象，那么这个 block 的类型为 NSConcreteGlobalBlock，如果该 block 引用了外部对象，那么该 block 的类型为 NSConcreteStackBlock，因为它本身在栈中，所以不会持有外部的对象。</p>
@@ -426,6 +426,7 @@ add1(b)
 </ul>
 <p>在 cocoa 中，每个线程都会有一个 runloop，每个 runloop 有一个 autoreleasepool 栈，每次 runloop 结束后，这个栈会被销毁。</p>
 <p>类方法返回的实例都会被标记为 autorelease，它会被自动添加到 pool 中，直到 pool 被销毁。</p>
+<p>当产生大量的 autorelease 对象时，由于对象得不到及时的释放，所以会导致内存暴增的现象，这时候最好添加一个局部的 autoreleasepool。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li>《Pro Multithreading and Memory Management for iOS and OS X》</li>
 <li><a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-clang/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-cn-clang/</a></li>
@@ -437,11 +438,11 @@ add1(b)
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/26/iOS-内存管理基础/" data-id="cinkjobdc0003rzziks2kca5m" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/26/iOS-内存管理基础/" data-id="cinl5h4sg0003sqzi87pv06mc" class="article-share-link" data-share="baidu">Share</a>
       
 
       
-        <a href="http://yoursite.com/2016/04/26/iOS-内存管理基础/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://yoursite.com/2016/04/26/iOS-内存管理基础/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -463,7 +464,7 @@ add1(b)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">3</span></li></ul>
     </div>
@@ -472,7 +473,7 @@ add1(b)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a>
     </div>
@@ -481,7 +482,7 @@ add1(b)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">4</span></li></ul>
     </div>
@@ -490,7 +491,7 @@ add1(b)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -539,7 +540,7 @@ add1(b)
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->
