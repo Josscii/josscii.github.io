@@ -101,10 +101,8 @@
 <li>因为内外部参数名被放在参数的前面，所以还有 parameter-label 一说，为了说清楚某些情况，我们下面也会使用到它。</li>
 </ul>
 <h2 id="基本函数知识"><a href="#基本函数知识" class="headerlink" title="基本函数知识"></a>基本函数知识</h2><p>Swift 方法既可以写成简单的没有参数外部名的 c 函数，又可以写成 OC 那种复杂的内外部参数名都有的函数。我们先来看一个例子：</p>
-<pre><code>func myFunction(param1: parameterType, param2: parameterType) throw -&gt; returnType {
-    // function body
-}
-</code></pre><p>首先我们要知道的是，在 Swift 中，在每个参数前只有一个 parameter-label 修饰时，第一个参数的外部参数名默认是被忽略的，而其他的参数的外部参数名和内部参数名相同，举个例子：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">myFunction</span><span class="params">(param1: parameterType, param2: parameterType)</span></span> <span class="keyword">throw</span> -&gt; returnType &#123;</span><br><span class="line">	    <span class="comment">// function body</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>首先我们要知道的是，在 Swift 中，在每个参数前只有一个 parameter-label 修饰时，第一个参数的外部参数名默认是被忽略的，而其他的参数的外部参数名和内部参数名相同，举个例子：</p>
 <pre><code>enum SongType: String {
     case Happy
     case Sad
@@ -204,11 +202,11 @@ add1(b)
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/26/Swift-Function-详解/" data-id="cinl5h4s70000sqzi9xb5yu03" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2016/04/26/Swift-Function-详解/" data-id="cinn3sn1a0001r8ziuwbrqtro" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="http://yoursite.com/2016/04/26/Swift-Function-详解/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://yoursite.com/2016/04/26/Swift-Function-详解/#ds-thread" class="article-comment-link">評論</a>
       
 
       
@@ -266,11 +264,11 @@ add1(b)
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/26/理解-ScrollView/" data-id="cinl5h4sh0004sqziy95zokzj" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2016/04/26/理解-ScrollView/" data-id="cinn3sn1z0009r8zi852j0wzd" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="http://yoursite.com/2016/04/26/理解-ScrollView/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://yoursite.com/2016/04/26/理解-ScrollView/#ds-thread" class="article-comment-link">評論</a>
       
 
       
@@ -340,11 +338,11 @@ add1(b)
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/26/Block-内存管理总结/" data-id="cinl5h4sb0001sqziq9gnk6hw" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2016/04/26/Block-内存管理总结/" data-id="cinn3sn150000r8ziz0mr2wzx" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="http://yoursite.com/2016/04/26/Block-内存管理总结/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://yoursite.com/2016/04/26/Block-内存管理总结/#ds-thread" class="article-comment-link">評論</a>
       
 
       
@@ -421,12 +419,10 @@ add1(b)
 <p>你可以通过 copy 操作来将 block 复制到堆中，此时 block 的类型为NSConcreteMallocBlock，此时 block 会持有外部对象。</p>
 <p>在 ARC 环境中，因为默认情况下对象指针被 __strong 标示，所以大多数时候创建的 block 都会被 copy 到堆中。</p>
 <h2 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h2><p>如果两个对象互相持有，那么就会发生循环引用的悲剧，这时，我们只需要将不太重要的那个设置为标识为 __weak，循环引用就会被解开，内存就可以正常释放了。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
-<li>为什么在 ARC 环境下我们还需要 autoreleasepool ?</li>
-</ul>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p><strong>1. 为什么在 ARC 环境下我们还需要 autoreleasepool ?</strong></p>
 <p>在 cocoa 中，每个线程都会有一个 runloop，每个 runloop 有一个 autoreleasepool 栈，每次 runloop 结束后，这个栈会被销毁。</p>
-<p>类方法返回的实例都会被标记为 autorelease，它会被自动添加到 pool 中，直到 pool 被销毁。</p>
-<p>当产生大量的 autorelease 对象时，由于对象得不到及时的释放，所以会导致内存暴增的现象，这时候最好添加一个局部的 autoreleasepool。</p>
+<p>类方法返回的对象都会被标记为 autorelease，它会被自动添加到 pool 中，直到 pool 被销毁。</p>
+<p>当产生大量的 autorelease 对象时，由于对象得不到及时的释放，所以会导致内存暴增的现象，这时候最好添加一个局部的 autoreleasepool 来解决这个问题。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li>《Pro Multithreading and Memory Management for iOS and OS X》</li>
 <li><a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-clang/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-cn-clang/</a></li>
@@ -438,11 +434,11 @@ add1(b)
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/26/iOS-内存管理基础/" data-id="cinl5h4sg0003sqzi87pv06mc" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2016/04/26/iOS-内存管理基础/" data-id="cinn3sn1f0003r8zijg7jh9r7" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="http://yoursite.com/2016/04/26/iOS-内存管理基础/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://yoursite.com/2016/04/26/iOS-内存管理基础/#ds-thread" class="article-comment-link">評論</a>
       
 
       
@@ -464,7 +460,7 @@ add1(b)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">標簽</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">3</span></li></ul>
     </div>
@@ -473,7 +469,7 @@ add1(b)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">標簽雲</h3>
     <div class="widget tagcloud">
       <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a>
     </div>
@@ -482,7 +478,7 @@ add1(b)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">歸檔</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">4</span></li></ul>
     </div>
@@ -491,7 +487,7 @@ add1(b)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
         
@@ -540,7 +536,7 @@ add1(b)
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
+<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->
